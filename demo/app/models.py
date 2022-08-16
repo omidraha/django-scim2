@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_extensions.db.models import TimeStampedModel
-from django_scim.models import AbstractSCIMGroup, AbstractSCIMUser
+from django_scim.models import AbstractSCIMGroupMixin, AbstractSCIMUserMixin
 
 
 class Company(models.Model):
@@ -14,7 +14,7 @@ class Company(models.Model):
     )
 
 
-class User(AbstractSCIMUser, TimeStampedModel, AbstractBaseUser):
+class User(AbstractSCIMUserMixin, TimeStampedModel, AbstractBaseUser):
     company = models.ForeignKey(
         'app.Company',
         on_delete=models.CASCADE,
@@ -56,7 +56,7 @@ class User(AbstractSCIMUser, TimeStampedModel, AbstractBaseUser):
         return self.first_name + (' ' + self.last_name[0] if self.last_name else '')
 
 
-class Group(TimeStampedModel, AbstractSCIMGroup):
+class Group(TimeStampedModel, AbstractSCIMGroupMixin):
     company = models.ForeignKey(
         'app.Company',
         on_delete=models.CASCADE,
